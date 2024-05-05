@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Invaders</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body onload ="init()" onkeydown="onKeyDown(event)">
+    
+    
+    <h2>Aliens: <span>0</span></h2>
+    <h3 class="score">Score: <span>0</span></h3>
+    <h3 class="fasterLaser">Super laser: <span></span></h3>
+    <h3 class="health">LIVES:  <span></span></h3>
+
+        <table class="board-container">
+        <tbody class="board"></tbody>
+        </table>
+
+        <div class="modal">
+        <h2></h2>
+        <div class="levels">
+            <h2>Choose Level:</h2>
+            <button onclick="setLevel(this)">Easy</button>
+            <button onclick="setLevel(this)">Normal</button>
+            <button onclick="setLevel(this)">Hard</button>
+        </div>
+        <button class="restart" onclick="restartGame(this)">Restart Game</button>
+        <hr>
+        <div class="specialKeysInfo">
+            <h2>Special Keys:</h3>
+                <img src="images/N.png" alt="N-Key" width="45">
+                <h3> - Explodes aliens around laser 💥 </h3><br>
+                <img src="images/x.png" alt="x" width="45">
+                <h3> USE KEY FOR SUPER LASER - Super laser ⚡</h3>
+        </div>
+    </div>
+
+     
+  
+
+    <script src="js/util.js"></script>
+    <script src="js/alien.js"></script>
+    <script src="js/hero.js"></script>
+    <script src="js/game.js"></script>
+
+</body>
+</html>

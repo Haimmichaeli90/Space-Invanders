@@ -1,0 +1,85 @@
+body {
+    background-image: url('../images/back.png');
+    height: 100vh;
+    background-color: #121010;
+    background-size: cover;
+    text-align: center;
+    color: oldlace;
+}
+
+
+table {
+    margin-top: 150px;
+    height: 780px;
+    width: 780px; 
+    margin: auto;
+    border-collapse: collapse;
+    /* border: 25px solid rgba(0, 0, 0, 0.096);  */
+    /* border: 25px solid rgba(0, 0, 0, 0.096); */
+}
+
+
+td {
+    width: 30px;
+    height: 30px;
+    /* border: 1px solid black; */
+    /* padding: 10px; */
+    text-align: center;
+    /* transition: background-color 0.5s; */
+    /* cursor: pointer; */
+}
+/* .SKY {
+    background-color: rgba(87, 97, 105, 0.092);
+} */
+
+h2 {
+    text-align: center;
+}
+
+h3 { 
+    margin-right: 800px;
+}
+/* .fast-laser {
+    /* margin-left: 560px; */
+    /* margin-top: 750px; */
+    .modal {
+        background-color: rgba(96, 107, 209, 0.855);
+        border: 5px solid rgb(0, 0, 0);
+        width: 400px;
+        height: 500px;
+        padding: 10px 0px 60px;
+        position: absolute;
+        top: 47%;
+        right: 64%;
+        transform: translate(-50%, -50%);
+    }
+
+    .specialKeysInfo {
+        color: rgb(234, 193, 97);
+        margin-left: 30px;
+        text-align: left;
+        
+    }
+    
+    .specialKeysInfo h3 {
+        display: inline;
+        font-size: 14px;
+    }
+
+    .modal button {
+        border-radius: 10px;
+        font-size: 17px;
+    }
+    
+    .modal button:hover {
+        cursor: pointer;
+    }
+    
+    .levels button {
+        background-color: #107394;
+        padding: 4px 10px;
+    }
+    
+    .levels button:hover {
+        background-color: #107394;
+    }
