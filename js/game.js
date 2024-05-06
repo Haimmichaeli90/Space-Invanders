@@ -10,7 +10,7 @@ var gCandyTimeout
 
 // Matrix of cell objects. e.g.: {type: SKY, gameObject: ALIEN}
 var gBoard
-
+// sh3.png
 var gGame = {
     isOn: false,
     alienCount: 0,
@@ -24,23 +24,27 @@ var gGame = {
     CANDY: '<img src="images/candyCrush.png" width="20">',
     ROCK: '🪨',
     SKY: 'SKY',
+    BUNKER: '<img src="images/b.jpeg" width="20">',
 }
 
 
 function init() {
     console.log('Initializing game...')
+    clearIntervalsGame()
 
     gGame.alienCount = 0
     gGame.isOn = true
-  
+
     gBoard = createBoard()
     createHero(gBoard)
     createAliens(gBoard)
-
     renderBoard(gBoard)
+
     setCountAliens()
     renderFasterLaserCount()
     renderHealthHero()
+    renderShields()
+    displayScore()
 
     moveAliens()
     addCandy()
@@ -50,39 +54,41 @@ function init() {
 }
 
 function restartGame(elBtn) {
-    // console.log('Restart button')
-    // console.log('clear interval',rockFallInterval)
-    // console.log('clear interval',rockInterval)
-    clearIntervalsGame()
+    const loseModal = document.getElementById('loseModal');
+    const winModal = document.getElementById('winModal');
 
-    // Reset game state
+    loseModal.style.display = 'none'
+    winModal.style.display = 'none'
+
+    clearIntervalsGame()
 
     gGame.isOn = true
     gGame.alienCount = 0
     gHero.score = 0
 
     displayScore()
-    renderHealthHero()// Ensure hero's health is rendered
-
+    renderHealthHero()
+    renderShields()
     elBtn.blur()
     init()
-
-
 }
 
 function createBoard() {
     const board = []
-
     for (var i = 0; i < gGame.BOARD_SIZE; i++){
         board.push([])
-
         for (var j = 0; j < gGame.BOARD_SIZE; j++){
-            board[i][j] = {type: SKY}
+
+            if ((i === 11) && (j >= 4 && j <= 7)) {
+               board[i][j] = createCell(gGame.BUNKER)
+            } else if (i === gGame.BOARD_SIZE - 1) { 
+                board[i][j] = createCell(gGame.EMPTY)
+            } else { 
+                board[i][j] = createCell()
+            }
         }
     }
-   
    return board
-   
 }
 
 // Render the board as a <table> to the page
@@ -117,9 +123,7 @@ function addCandy() {
         addCandy()
         return
     }
-
     updateCell(candyPos, gGame.CANDY)
-
     gCandyTimeout = setTimeout(() => {
         // Check if candy is still on the board (not eaten)
         if (gBoard[candyPos.i][candyPos.j].gameObject === gGame.CANDY) {
@@ -133,35 +137,41 @@ function setLevel(elBtn) {
     if (elBtn.innerText === 'Easy') {
         ALIEN_ROW_LENGTH = 8
         ALIEN_ROW_COUNT = 3
-        ALIEN_SPEED = 500
+        ALIEN_SPEED = 900
     } else if (elBtn.innerText === 'Normal') {
         ALIEN_ROW_LENGTH = 8
         ALIEN_ROW_COUNT = 4
-        ALIEN_SPEED = 400
+        ALIEN_SPEED = 600
     } else {
         ALIEN_ROW_LENGTH = 10
         ALIEN_ROW_COUNT = 5
-        ALIEN_SPEED = 300
+        ALIEN_SPEED = 500
     }
     cleanLevelBtnColor()
     elBtn.style.backgroundColor = '#814f78'
     clearIntervalsGame()
     renderHealthHero()
+    renderShields()
     elBtn.blur()
     init()
 }
 
-
-
 function isGameOver() {
-    const heroRow = gBoard[gHero.pos.i]
+    const heroRow = gBoard[gHero.pos.i];
     for (var j = 0; j < gGame.BOARD_SIZE; j++) {
-        if (heroRow[j].gameObject === gGame.ALIEN || heroRow[j].gameObject === gGame.ALIEN2 || heroRow[j].gameObject === gGame.ALIEN3 || gGame.alienCount === 0) {
+        if (heroRow[j].gameObject === gGame.ALIEN || 
+            heroRow[j].gameObject === gGame.ALIEN2 || 
+            heroRow[j].gameObject === gGame.ALIEN3) {
             clearIntervalsGame()
             gGame.isOn = false
-            console.log('Game Over!')
+            document.getElementById('loseModal').style.display = 'block'
+            return true;
+        } else if (gGame.alienCount === 0){
+            clearIntervalsGame()
+            gGame.isOn = false
+            document.getElementById('winModal').style.display = 'block'
             return true
-        } 
+        }
     }
     return false
 }
@@ -199,4 +209,3 @@ function clearIntervalsGame(){
     clearInterval(rockFallInterval); 
     clearInterval(rockInterval); 
 }
-

@@ -8,6 +8,7 @@ var gIntervalLaser
 var gBlinkLaser
 var gLaserPos
 var gBlinkRock
+var gHeroShield = false
 
 // creates the hero and place it on board
 function createHero(board) {
@@ -17,13 +18,11 @@ function createHero(board) {
         score: 0,
         fasterLaserCount: 3,
         isFasterLaser: false,
-        health: 3,
-        live: 3,
-        
+        lives: 3,
+        shield: 3,
     }
     board[gHero.pos.i][gHero.pos.j].gameObject = gGame.HERO
 }
-
 // Move the hero right (1) or left (-1)
 function moveHero(dir) {
     if(!gGame.isOn) return false
@@ -62,7 +61,6 @@ function blowUpNeighbors() {
     gHero.isShoot = false
 }
 
-
 // onKeyDown(ev)
 // Handle game keys
 function onKeyDown(ev) {
@@ -86,48 +84,89 @@ function onKeyDown(ev) {
         case 'x':
             fasterLaser()
             break;
+        case 'z':
+            activateShield()
+            break;
         default:
             break;
     }
 }
 
 function shoot() {
-    if (!gGame.isOn) return false
-    if (gHero.isShoot) return
-
+    if (!gGame.isOn || gHero.isShoot) return false;
     setLaser()
-    
+
     gHero.isShoot = true
     var hitAlien = false
-
-    var laserPos = { i: gHero.pos.i, j: gHero.pos.j }
+    var laserPos = { i: gHero.pos.i, j: gHero.pos.j };
 
     gIntervalLaser = setInterval(() => {
         laserPos.i--
-        if (isAlien(laserPos) && laserPos.i >= 0) {
-            if (!hitAlien) {
 
+        if (laserPos.i < 0) {
+            clearInterval(gIntervalLaser)
+            gHero.isShoot = false
+            return false
+        }
+        if (isAlien(laserPos)) {
+            if (!hitAlien) {
                 if (gBoard[laserPos.i][laserPos.j].gameObject !== gGame.CANDY) {
                     handleAlienHit(laserPos)
                     hitAlien = true
+                    clearInterval(gIntervalLaser)
                 }
             }
-            clearInterval(gIntervalLaser)
             gHero.isShoot = false
+            return true
         }
         if (gBoard[laserPos.i][laserPos.j].gameObject === gGame.CANDY) {
             updateCell(laserPos, gGame.EMPTY)
             handleHitCandy()
-        }
-        // If the laser reaches the top or doesn't hit anything, stop the interval
-        if (laserPos.i <= 0 || isAlien(laserPos)) {
             clearInterval(gIntervalLaser)
             gHero.isShoot = false
+            return true
         }
+
         gLaserPos = laserPos
         blinkLaser(laserPos, gGame.LASER)
     }, LASER_SPEED)
-    
+
+    return true 
+}
+
+function handleHeroHit(){
+    if (gHero.heroShield) return
+
+    gHero.lives--
+    renderHealthHero()
+
+    if (gHero.lives === 0) {
+        gGame.isOn = false
+        clearIntervalsGame()
+        displayLoseModal()
+        return
+    }
+}
+
+function activateShield(){
+    if (!gGame.isOn || gHero.shield === 0 || gHeroShield) return
+
+    gHeroShield = true
+    gGame.HERO = '<img src="images/sh3.png" width="30">'
+
+    updateCell(gHero.pos, gGame.HERO)
+    gHero.shield--
+    renderShields()
+
+    setTimeout(() => {
+        deactivateShield()
+    }, 5000)
+}
+
+function deactivateShield() {
+    gHeroShield = false
+    gGame.HERO = '<img src="images/rocket-ship.png" width="20">'
+    updateCell(gHero.pos, gGame.HERO)
 }
 
 function handleHitCandy(){
@@ -136,9 +175,12 @@ function handleHitCandy(){
     clearInterval(rockInterval)
     clearInterval(gIntervalLaser)
     gHero.isShoot = false
+    renderShields()
 }
 
 function setLaser() {
+clearInterval(gIntervalLaser)
+
     if (gHero.isFasterLaser) {
 
         console.log('SUPER')
@@ -166,26 +208,6 @@ function fasterLaser() {
     renderFasterLaserCount()
 }
 
-
-function renderFasterLaserCount() {
-    const elSpan = document.querySelector('.fasterLaser span')
-    elSpan.innerHTML = '⚡'.repeat(gHero.fasterLaserCount)
-}
-
-function renderHealthHero() {
-    const elSpan = document.querySelector('.health span');
-    const healthCount = Math.max(0, gHero.health) // Ensure health count is non-negative
-    elSpan.innerHTML = '🚀'.repeat(healthCount)
-}
-
-function renderExplosion(pos) {
-    updateCell(pos, '💥')
-    
-    setTimeout(() => {
-        updateCell(pos, gGame.EMPTY)
-    }, EXPLOSION_DURATION)
-}
-
 // renders a LASER at specific cell for short time and removes it
 function blinkLaser(pos) {
     updateCell(pos,gGame.LASER)
@@ -201,3 +223,33 @@ function blinkRock(pos){
         updateCell(pos, gGame.EMPTY)
     }, LASER_SPEED - 30)
 }
+
+function renderExplosion(pos) {
+    updateCell(pos, '💥')
+    
+    setTimeout(() => {
+        updateCell(pos, gGame.EMPTY)
+    }, EXPLOSION_DURATION)
+}
+
+function displayLoseModal() {
+    const loseModal = document.getElementById('loseModal');
+    loseModal.style.display = 'block';
+}
+
+function renderFasterLaserCount() {
+    const elSpan = document.querySelector('.fasterLaser span')
+    elSpan.innerHTML = '⚡'.repeat(gHero.fasterLaserCount)
+}
+
+function renderHealthHero() {
+    const elSpan = document.querySelector('.health span')
+    const liveCount = Math.max(0, gHero.lives) 
+    elSpan.innerHTML = '🚀'.repeat(liveCount)
+}
+
+function renderShields() {
+    const elSpan = document.querySelector('.shield span')
+    elSpan.innerHTML = '🛡️'.repeat(gHero.shield)
+}
+

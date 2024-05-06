@@ -1,9 +1,8 @@
 'use strict'
 
-var ALIEN_SPEED = 500
+var ALIEN_SPEED = 1000
 
 var gIntervalAliens
-// var gAlienInterval
 
 var gAliensTopRowIdx 
 var gAliensBottomRowIdx 
@@ -14,7 +13,7 @@ var rockInterval
 var rockFallInterval
 
 function createAliens(board) {
-    const startIdx = Math.floor((board.length - ALIEN_ROW_LENGTH) / 2);
+    const startIdx = Math.floor((board.length - ALIEN_ROW_LENGTH) / 2)
     const alienLength = startIdx + ALIEN_ROW_LENGTH
 
     for (var i = 0; i < ALIEN_ROW_COUNT; i++) {
@@ -23,25 +22,19 @@ function createAliens(board) {
             else if (i === 1) board[i][j].gameObject = gGame.ALIEN2
             else board[i][j].gameObject = gGame.ALIEN3
             gGame.alienCount++
-        
         }
     }
-
-    gAliensTopRowIdx = 0 // Initialize top row index
+    gAliensTopRowIdx = 0
     gAliensBottomRowIdx = ALIEN_ROW_COUNT - 1
 }
 
 function handleAlienHit(pos) {
     updateCell(pos)
-    
     gGame.alienCount--
     gHero.score += 10
-    gHero.health -= 10
     setCountAliens()
     displayScore()
-
     if (gGame.alienCount === 0) isGameOver()
-    // if (gHero.health <= 0) isGameOver()
 }
 
 function handleAlienMovement() {
@@ -61,7 +54,6 @@ function handleAlienMovement() {
 }
 
 function moveAliens() {
-    // Start the interval for moving the aliens
     gIntervalAliens = setInterval(() => {
         handleAlienMovement()
         renderBoard(gBoard)
@@ -116,16 +108,11 @@ function moveAliensDown() {
     }
     gAliensTopRowIdx++
     gAliensBottomRowIdx++
-
 }
 
-
-function isAlien(pos){
-
-    var alienPos =  gBoard[pos.i][pos.j].gameObject === gGame.ALIEN ||
-     gBoard[pos.i][pos.j].gameObject === gGame.ALIEN2 ||
-     gBoard[pos.i][pos.j].gameObject === gGame.ALIEN3
-    return alienPos
+function isAlien(pos) {
+    const alienTypes = [gGame.ALIEN, gGame.ALIEN2, gGame.ALIEN3]
+    return alienTypes.includes(gBoard[pos.i][pos.j].gameObject)
 }
 
 function isMonsterAtRightEdge() {
@@ -157,52 +144,42 @@ function changeNextDirection() {
     gAlienDir = gAlienDir === 'right' ? 'left' : 'right'
 }
 
-
 function throwRock() {
     if (!gGame.isOn) {
-        return;
+        return
     }
+    clearInterval(rockInterval)
 
-     rockInterval = setInterval(() => {
+    rockInterval = setInterval(() => {
         var rockPos = getRandomAlienPos()
-
         if (!rockPos) {
             clearInterval(rockInterval)
             return
         }
         rockFallInterval = setInterval(() => {
             rockPos.i++
-
             if (rockPos.i >= gGame.BOARD_SIZE - 1) {
                 clearInterval(rockFallInterval)
-                clearInterval(rockInterval)
-                throwRock() // Throw another rock
                 return
             }
-
             if (isAlien(rockPos)) {
                 clearInterval(rockFallInterval)
                 return
             }
-
             if (gBoard[rockPos.i][rockPos.j].gameObject === gGame.HERO) {
+                if(gHeroShield) return
                 clearInterval(rockFallInterval)
                 handleHeroHit()
+                return
             }
-
+            // } else if (gBoard[rockPos.i][rockPos.j].gameObject === gGame.LASER || rockPos.i === (gBoard.length - 1)) {
+            //     console.log('Laser Hit The Rock')
+            //     clearInterval(rockFallInterval)
+            //     return
+            // }
             blinkRock(rockPos)
         }, 100)
-    }, 2000) 
-}
-
-function handleHeroHit(){
-    gHero.health--
-    renderHealthHero()
-    if (gHero.health === 0) {
-        gGame.isOn = false
-        clearIntervalsGame()
-        return
-    }
+    }, 2000)
 }
 
 function getRandomAlienPos() {

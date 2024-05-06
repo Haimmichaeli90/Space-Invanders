@@ -9,11 +9,11 @@
 
 <body onload ="init()" onkeydown="onKeyDown(event)">
     
-    
     <h2>Aliens: <span>0</span></h2>
     <h3 class="score">Score: <span>0</span></h3>
     <h3 class="fasterLaser">Super laser: <span></span></h3>
-    <h3 class="health">LIVES:  <span></span></h3>
+    <h3 class="health">Lives:  <span></span></h3>
+    <h3 class="shield">Shields: <span></span></h3>
 
         <table class="board-container">
         <tbody class="board"></tbody>
@@ -31,15 +31,20 @@
         <hr>
         <div class="specialKeysInfo">
             <h2>Special Keys:</h3>
-                <img src="images/N.png" alt="N-Key" width="45">
-                <h3> - Explodes aliens around laser 💥 </h3><br>
-                <img src="images/x.png" alt="x" width="45">
-                <h3> USE KEY FOR SUPER LASER - Super laser ⚡</h3>
+                <img src="images/N.png" alt="N-Key" width="52">
+                <h3> Explodes aliens around laser 💥 </h3 >
+                <img src="images/x.png" alt="X" width="52">
+                <h3>  Use for shoot special super laser - Super laser ⚡ </h3  width="50">
+                <img src="images/Z.png" alt="Z-Key" width="52">
+                <h3>  Shield Hero 🛡️ . </h3>
         </div>
     </div>
-
-     
-  
+    <div id="winModal" class="win-modal-message">
+        <h1>Congratulations! You Win! Can you handle a tougher challenge?</h1>
+    </div>
+    <div id="loseModal" class="lose-modal-message">
+        <h1>Game Over! You Lose! Better luck next time!</h1>
+    </div>
 
     <script src="js/util.js"></script>
     <script src="js/alien.js"></script>
@@ -48,3 +53,4 @@
 
 </body>
 </html>
+
