@@ -5,6 +5,13 @@ var ALIEN_ROW_COUNT = 3
 
 const SKY = 'SKY'
 
+var playSound = false
+
+var audioGame = new Audio('../audio/spaceinvaders1.mp3')
+var deathInvaderAudio = new Audio('../audio/explosion.wav')
+var winningAudio = new Audio('../audio/winning.mp3')
+
+
 var gIntervalCandy
 var gCandyTimeout
 
@@ -16,44 +23,47 @@ var gGame = {
     alienCount: 0,
     BOARD_SIZE: 14,
     HERO: '<img src="images/rocket-ship.png" width="30">',
-    ALIEN: '<img src="images/invader1.png" width="20">',
-    ALIEN2: '<img src="images/invader2.png" width="20">',
-    ALIEN3: '<img src="images/alien2.png" width="20">',
+    ALIEN: '<img src="images/saucer3b.png" width="20">',
+    ALIEN2: '<img src="images/saucer1a.png" width="20">',
+    ALIEN3: '<img src="images/saucer2a.png" width="20">',
     EMPTY: '',
     LASER: '<img src="images/laser.png" width="20">',
     CANDY: '<img src="images/candyCrush.png" width="20">',
     ROCK: '🪨',
     SKY: 'SKY',
-    BUNKER: '<img src="images/b.jpeg" width="20">',
+    BUNKER: '<img src="images/baseshipb.ico" width="20">',
+    BunkerHitCount: 0,
 }
 
 
 function init() {
     console.log('Initializing game...')
-    clearIntervalsGame()
-
+    audioGame.play()
+    
+    clearIntervalsGame()    
     gGame.alienCount = 0
     gGame.isOn = true
-
+  
     gBoard = createBoard()
     createHero(gBoard)
     createAliens(gBoard)
     renderBoard(gBoard)
-
+    
     setCountAliens()
     renderFasterLaserCount()
     renderHealthHero()
     renderShields()
     displayScore()
-
+    
     moveAliens()
     addCandy()
     throwRock()
-    
+
     gIntervalCandy = setInterval(addCandy, 10000)
 }
 
 function restartGame(elBtn) {
+   
     const loseModal = document.getElementById('loseModal');
     const winModal = document.getElementById('winModal');
 
@@ -69,6 +79,7 @@ function restartGame(elBtn) {
     displayScore()
     renderHealthHero()
     renderShields()
+
     elBtn.blur()
     init()
 }
@@ -79,7 +90,7 @@ function createBoard() {
         board.push([])
         for (var j = 0; j < gGame.BOARD_SIZE; j++){
 
-            if ((i === 11) && (j >= 4 && j <= 7)) {
+            if ((i === 11) && (j >= 4 && j <= 8)) {
                board[i][j] = createCell(gGame.BUNKER)
             } else if (i === gGame.BOARD_SIZE - 1) { 
                 board[i][j] = createCell(gGame.EMPTY)
@@ -153,6 +164,7 @@ function setLevel(elBtn) {
     renderHealthHero()
     renderShields()
     elBtn.blur()
+
     init()
 }
 
@@ -170,10 +182,29 @@ function isGameOver() {
             clearIntervalsGame()
             gGame.isOn = false
             document.getElementById('winModal').style.display = 'block'
+            if(!playSound) 
+            winningAudio.play()
             return true
+            
         }
     }
     return false
+}
+function handleBunkerHit() {
+    gGame.BunkerHitCount++
+    if (gGame.BunkerHitCount >= 3) {
+        removeBunker()
+    }
+}
+
+function removeBunker() {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[i].length; j++) {
+            if (gBoard[i][j].gameObject === gGame.BUNKER) {
+                updateCell({ i: i, j: j }, gGame.EMPTY)
+            }
+        }
+    }
 }
 
 // position such as: {i: 2, j: 7}
@@ -209,3 +240,4 @@ function clearIntervalsGame(){
     clearInterval(rockFallInterval); 
     clearInterval(rockInterval); 
 }
+

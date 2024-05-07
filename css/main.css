@@ -7,7 +7,6 @@ body {
     color: oldlace;
 }
 
-
 table {
     margin-top: 150px;
     height: 780px;
@@ -17,7 +16,6 @@ table {
     /* border: 25px solid rgba(0, 0, 0, 0.096);  */
     /* border: 25px solid rgba(0, 0, 0, 0.096); */
 }
-
 
 td {
     width: 30px;
@@ -39,9 +37,6 @@ h2 {
 h3 { 
     margin-right: 800px;
 }
-/* .fast-laser {
-    /* margin-left: 560px; */
-    /* margin-top: 750px; */
 
 .modal {
     background-color: rgba(96, 107, 209, 0.855);

@@ -171,12 +171,13 @@ function throwRock() {
                 clearInterval(rockFallInterval)
                 handleHeroHit()
                 return
-            }
-            // } else if (gBoard[rockPos.i][rockPos.j].gameObject === gGame.LASER || rockPos.i === (gBoard.length - 1)) {
-            //     console.log('Laser Hit The Rock')
-            //     clearInterval(rockFallInterval)
-            //     return
-            // }
+            }   
+            if (gBoard[rockPos.i][rockPos.j].gameObject === gGame.BUNKER) {
+                handleBunkerHit()
+                clearInterval(rockFallInterval);
+                return;
+            }       
+          
             blinkRock(rockPos)
         }, 100)
     }, 2000)
