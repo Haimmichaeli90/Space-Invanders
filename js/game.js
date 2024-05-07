@@ -5,27 +5,19 @@ var ALIEN_ROW_COUNT = 3
 
 const SKY = 'SKY'
 
-var playSound = false
-
-var audioGame = new Audio('../audio/spaceinvaders1.mp3')
-var deathInvaderAudio = new Audio('../audio/explosion.wav')
-var winningAudio = new Audio('../audio/winning.mp3')
-
-
 var gIntervalCandy
 var gCandyTimeout
 
 // Matrix of cell objects. e.g.: {type: SKY, gameObject: ALIEN}
 var gBoard
-// sh3.png
 var gGame = {
     isOn: false,
     alienCount: 0,
     BOARD_SIZE: 14,
     HERO: '<img src="images/rocket-ship.png" width="30">',
-    ALIEN: '<img src="images/saucer3b.png" width="20">',
-    ALIEN2: '<img src="images/saucer1a.png" width="20">',
-    ALIEN3: '<img src="images/saucer2a.png" width="20">',
+    ALIEN: '<img src="images/invader1.png" width="15">',
+    ALIEN2: '<img src="images/invader2.png" width="15">',
+    ALIEN3: '<img src="images/alien2.png" width="15">',
     EMPTY: '',
     LASER: '<img src="images/laser.png" width="20">',
     CANDY: '<img src="images/candyCrush.png" width="20">',
@@ -38,7 +30,6 @@ var gGame = {
 
 function init() {
     console.log('Initializing game...')
-    audioGame.play()
     
     clearIntervalsGame()    
     gGame.alienCount = 0
@@ -182,8 +173,6 @@ function isGameOver() {
             clearIntervalsGame()
             gGame.isOn = false
             document.getElementById('winModal').style.display = 'block'
-            if(!playSound) 
-            winningAudio.play()
             return true
             
         }

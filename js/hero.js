@@ -9,7 +9,7 @@ var gBlinkLaser
 var gLaserPos
 var gBlinkRock
 var gHeroShield = false
-var shootAudio = new Audio('../audio/shoot.mp3')
+
 // creates the hero and place it on board
 function createHero(board) {
     gHero = {
@@ -97,7 +97,6 @@ function shoot() {
     if (!gGame.isOn || gHero.isShoot) return false;
 
     setLaser()
-    // shootAudio.play()
     
     gHero.isShoot = true
     var hitAlien = false
@@ -146,7 +145,6 @@ function handleHeroHit(){
     if (gHero.heroShield) return
 
     gHero.lives--
-    // deathInvaderAudio.play()
     renderHealthHero()
 
     if (gHero.lives === 0) {
@@ -188,7 +186,7 @@ function handleHitCandy(){
 }
 
 function setLaser() {
-clearInterval(gIntervalLaser)
+    clearInterval(gIntervalLaser)
     if (gHero.isFasterLaser) {
 
         console.log('SUPER')
