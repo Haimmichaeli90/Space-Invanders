@@ -7,7 +7,7 @@ const SKY = 'SKY'
 
 var gIntervalCandy
 var gCandyTimeout
-var audioGame = null
+
 // Matrix of cell objects. e.g.: {type: SKY, gameObject: ALIEN}
 var gBoard
 var gGame = {
@@ -50,24 +50,6 @@ function init() {
     throwRock()
 
     gIntervalCandy = setInterval(addCandy, 10000)
-}
-
-
-function playAudio(elBtn) {
-    var startButton = document.getElementById('startButton')
-    if (audioGame && !audioGame.paused) { 
-        audioGame.pause()
-        audioGame.currentTime = 0
-        startButton.innerText = 'Start Music'
-    } else { 
-        startButton.innerText = 'Stop Music'
-        document.querySelector('.modal').style.display = 'block'
-        if (!audioGame) { 
-            audioGame = new Audio('../audio/spaceinvaders1.mpeg')
-        }
-        audioGame.play()
-    }
-    elBtn.blur()
 }
 
 function restartGame(elBtn) {

@@ -9,8 +9,6 @@ var gBlinkLaser
 var gLaserPos
 var gBlinkRock
 var gHeroShield = false
-var shootAudio = new Audio('../audio/shoot.wav')
-
 
 // creates the hero and place it on board
 function createHero(board) {
@@ -99,8 +97,7 @@ function shoot() {
     if (!gGame.isOn || gHero.isShoot) return false
 
     setLaser()
-    shootAudio.play()
-    
+
     gHero.isShoot = true
     var hitAlien = false
     var laserPos = { i: gHero.pos.i, j: gHero.pos.j }
