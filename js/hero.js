@@ -239,8 +239,8 @@ function renderExplosion(pos) {
 }
 
 function displayLoseModal() {
-    const loseModal = document.getElementById('loseModal');
-    loseModal.style.display = 'block';
+    const loseModal = document.getElementById('loseModal')
+    loseModal.style.display = 'block'
 }
 
 function renderFasterLaserCount() {
