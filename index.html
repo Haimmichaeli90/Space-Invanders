@@ -9,6 +9,7 @@
 
 <body onload ="init()" onkeydown="onKeyDown(event)">
     
+    
     <h2>Aliens: <span>0</span></h2>
     <h3 class="score">Score: <span>0</span></h3>
     <h3 class="fasterLaser">Super laser: <span></span></h3>
@@ -29,6 +30,7 @@
             <button onclick="setLevel(this)">Hard</button>
         </div>
         <button class="restart" onclick="restartGame(this)">Restart Game</button>
+        <button id="startButton" onclick="playAudio(this)">Play Music</button>
         <hr>
 
         <div class="specialKeysInfo">
