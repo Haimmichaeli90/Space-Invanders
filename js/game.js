@@ -33,6 +33,7 @@ function init() {
     clearIntervalsGame()    
     gGame.alienCount = 0
     gGame.isOn = true
+    gGame.BunkerHitCount = 0
   
     gBoard = createBoard()
     createHero(gBoard)
